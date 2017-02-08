@@ -1,0 +1,14 @@
+{
+  "name": "cognito-user-pool",
+  "version": "0.1.2",
+  "description": "(alpha) A simple Node.js library for managing your users on AWS Cognito User Pool",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amazon-cognito-identity-js": "^1.12.0"
+  }
+}
