@@ -12,12 +12,12 @@ npm install --save cognito-user-pool
 
 Then in your project:
 ```
-let Cognito = require('cognito-user-pool');
 const poolData = {
   UserPoolId : USER_POOL_ID, // your user pool ID
   ClientId : USER_POOL_CLIENT_ID, // generated in the AWS console
   Paranoia : PARANOIA_LEVEL // an integer between 1 - 10
 };
+let CognitoUserPoolWrapper = require('cognito-user-pool')(poolData);
 ```
 
 ## Methods
@@ -29,12 +29,12 @@ Actual data to pass to the function depends on your user pool settings.
 Signup a new user:
 
 ```
-Cognito.signup(poolData, body, callback)
+CognitoUserPoolWrapper.signup(params, callback)
 ```
 
 
 ```
-body: {
+params: {
   "username": "string",
   "password": "string",
   "attributes": [
@@ -52,11 +52,11 @@ Depending on your settings, email confirmation may be required.
 In that case, the following function must be called:
 
 ```
-Cognito.signupConfirm(poolData, body, callback)
+CognitoUserPoolWrapper.signupConfirm(params, callback)
 ```
 
 ```
-body: {
+params: {
   "username": "string",
   "confirmationCode": "string"
 }
@@ -66,10 +66,10 @@ body: {
 
 If the user didn't receive the signup confirmation code, they may request a new code:
 
-```Cognito.signupResend(poolData, body, callback)```
+```CognitoUserPoolWrapper.signupResend(params, callback)```
 
 ```
-body: {
+params: {
   "username": "string"
 }
 ```
@@ -79,13 +79,13 @@ body: {
 Login an existing and confirmed user:
 
 ```
-Cognito.login(poolData, body, callback)
+CognitoUserPoolWrapper.login(params, callback)
 ```
 
 Note that username can be any alias field as defined in user pool settings.
 
 ```
-body: {
+params: {
   "username": "string",
   "password": "string"
 }
@@ -124,11 +124,11 @@ The token you will need to authenticate against this module later on is `refresh
 Using the information from the `login` method and the `mfaCode` received by SMS:
 
 ```
-Cognito.loginMfa(poolData, body, callback)
+CognitoUserPoolWrapper.loginMfa(params, callback)
 ```
 
 ```
-body: {
+params: {
   "username": "string",
   "loginSession": "string",
   "mfaCode": "string"
@@ -140,11 +140,11 @@ body: {
 Using the information from the `login` method:
 
 ```
-Cognito.loginNewPasswordRequired(poolData, body, callback)
+CognitoUserPoolWrapper.loginNewPasswordRequired(params, callback)
 ```
 
 ```
-body: {
+params: {
   "username": "string",
   "loginSession": "string",
   "newPassword": "string"
@@ -156,11 +156,11 @@ body: {
 This method invalidates all issued tokens.
 
 ```
-Cognito.logout(poolData, body, callback)
+CognitoUserPoolWrapper.logout(params, callback)
 ```
 
 ```
-body: {
+params: {
   "username": "string",
   "refreshToken": "string"
 }
@@ -169,11 +169,11 @@ body: {
 ### Enable or Disable MFA
 
 ```
-Cognito.mfa(poolData, body, callback)
+CognitoUserPoolWrapper.mfa(params, callback)
 ```
 
 ```
-body: {
+params: {
   "enableMfa": boolean,
   "username": "string",
   "refreshToken": "string"
@@ -185,11 +185,11 @@ body: {
 Retrieve all attributes associated with this user.
 
 ```
-Cognito.profile(poolData, body, callback)
+CognitoUserPoolWrapper.profile(params, callback)
 ```
 
 ```
-body: {
+params: {
   "username": "string",
   "refreshToken": "string"
 }
@@ -200,13 +200,13 @@ body: {
 Use this endpoint to edit all user attributes except phone (see below).
 
 ```
-Cognito.profileEdit(poolData, body, callback)
+CognitoUserPoolWrapper.profileEdit(params, callback)
 ```
 
 If the `Value` of an attribute is left empty, that attribute will be removed. 
 
 ```
-body: {
+params: {
   "username": "string",
   "refreshToken": "string",
   "attributes": [
@@ -223,13 +223,13 @@ body: {
 Use this endpoint to change the user's phone number.
 
 ```
-Cognito.profileEditPhoneNumber(poolData, body, callback)
+CognitoUserPoolWrapper.profileEditPhoneNumber(params, callback)
 ```
 
 If `phone_number` is undefined or null, it will be removed and MFA will be disabled on this user.
 
 ```
-body: {
+params: {
   "username": "string",
   "refreshToken": "string",
   "phone_number: "string"
@@ -241,11 +241,11 @@ body: {
 Use this endpoint to change the user's password.
 
 ```
-Cognito.passwordChange(poolData, body, callback)
+CognitoUserPoolWrapper.passwordChange(params, callback)
 ```
 
 ```
-body: {
+params: {
   "username": "string",
   "refreshToken": "string",
   "oldPassword": "string",
@@ -260,11 +260,11 @@ Cognito will send a `passwordResetCode` to one of the user's confirmed contact m
 to be used in the `passwordReset` method below.
 
 ```
-Cognito.passwordForgot(poolData, body, callback)
+CognitoUserPoolWrapper.passwordForgot(params, callback)
 ```
 
 ```
-body: {
+params: {
   "username": "string"
 }
 ```
@@ -274,11 +274,11 @@ body: {
 Finish the forgot password flow.  
 
 ```
-Cognito.passwordReset(poolData, body, callback)
+CognitoUserPoolWrapper.passwordReset(params, callback)
 ```
 
 ```
-body: {
+params: {
   "username": "string",
   "passwordResetCode": "string",
   "newPassword": "string
