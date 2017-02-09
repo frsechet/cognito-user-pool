@@ -14,11 +14,11 @@ module.exports = (poolData, body, cb) => {
   };
 
   let cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
-  cognitoUser.confirmRegistration(confirmationCode, true, function(err, result) {
+  cognitoUser.confirmRegistration(confirmationCode, true, function(err, res) {
     if (err) {
       return cb(err);
     }
-    return cb(null, Success(result));
+    return cb(null, res);
   });
 
 };
