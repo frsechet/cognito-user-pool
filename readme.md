@@ -28,7 +28,9 @@ Actual data to pass to the function depends on your user pool settings.
 
 Signup a new user:
 
-`Cognito.signup(poolData, body, callback)`
+```
+Cognito.signup(poolData, body, callback)
+```
 
 
 ```
@@ -49,7 +51,9 @@ body: {
 Depending on your settings, email confirmation may be required.  
 In that case, the following function must be called:
 
-`Cognito.signupConfirm(poolData, body, callback)`
+```
+Cognito.signupConfirm(poolData, body, callback)
+```
 
 ```
 body: {
@@ -62,7 +66,7 @@ body: {
 
 If the user didn't receive the signup confirmation code, they may request a new code:
 
-`Cognito.signupResend(poolData, body, callback)`
+```Cognito.signupResend(poolData, body, callback)```
 
 ```
 body: {
@@ -74,12 +78,14 @@ body: {
 
 Login an existing and confirmed user:
 
-`Cognito.login(poolData, body, callback)`
+```
+Cognito.login(poolData, body, callback)
+```
 
 Note that username can be any alias field as defined in user pool settings.
 
 ```
-{
+body: {
   "username": "string",
   "password": "string"
 }
@@ -117,7 +123,9 @@ The token you will need to authenticate against this module later on is `refresh
 
 Using the information from the `login` method and the `mfaCode` received by SMS:
 
-`Cognito.loginMfa(poolData, body, callback)`
+```
+Cognito.loginMfa(poolData, body, callback)
+```
 
 ```
 body: {
@@ -131,7 +139,9 @@ body: {
 
 Using the information from the `login` method:
 
-`Cognito.loginNewPasswordRequired(poolData, body, callback)`
+```
+Cognito.loginNewPasswordRequired(poolData, body, callback)
+```
 
 ```
 body: {
@@ -145,7 +155,9 @@ body: {
 
 This method invalidates all issued tokens.
 
-`Cognito.logout(poolData, body, callback)`
+```
+Cognito.logout(poolData, body, callback)
+```
 
 ```
 body: {
@@ -156,19 +168,9 @@ body: {
 
 ### Enable or Disable MFA
 
-`Cognito.mfa(poolData, body, callback)`
-
 ```
-body: {
-  "enableMfa": boolean,
-  "username": "string",
-  "refreshToken": "string"
-}
+Cognito.mfa(poolData, body, callback)
 ```
-
-### Enable or Disable MFA
-
-`Cognito.mfa(poolData, body, callback)`
 
 ```
 body: {
@@ -182,7 +184,9 @@ body: {
 
 Retrieve all attributes associated with this user.
 
-`Cognito.profile(poolData, body, callback)`
+```
+Cognito.profile(poolData, body, callback)
+```
 
 ```
 body: {
@@ -195,7 +199,9 @@ body: {
 
 Use this endpoint to edit all user attributes except phone (see below).
 
-`Cognito.profileEdit(poolData, body, callback)`
+```
+Cognito.profileEdit(poolData, body, callback)
+```
 
 If the `Value` of an attribute is left empty, that attribute will be removed. 
 
@@ -216,7 +222,9 @@ body: {
 
 Use this endpoint to change the user's phone number.
 
-`Cognito.profileEditPhoneNumber(poolData, body, callback)`
+```
+Cognito.profileEditPhoneNumber(poolData, body, callback)
+```
 
 If `phone_number` is undefined or null, it will be removed and MFA will be disabled on this user.
 
@@ -232,7 +240,9 @@ body: {
 
 Use this endpoint to change the user's password.
 
-`Cognito.mfa(poolData, body, callback)`
+```
+Cognito.passwordChange(poolData, body, callback)
+```
 
 ```
 body: {
@@ -249,7 +259,9 @@ Start a forgot password flow.
 Cognito will send a `passwordResetCode` to one of the user's confirmed contact methods (email or SMS)
 to be used in the `passwordReset` method below.
 
-`Cognito.mfa(poolData, body, callback)`
+```
+Cognito.passwordForgot(poolData, body, callback)
+```
 
 ```
 body: {
@@ -261,7 +273,9 @@ body: {
 
 Finish the forgot password flow.  
 
-`Cognito.mfa(poolData, body, callback)`
+```
+Cognito.passwordReset(poolData, body, callback)
+```
 
 ```
 body: {

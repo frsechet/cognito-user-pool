@@ -1,11 +1,9 @@
 "use strict";
-
-const Helpers = require("./helpers");
-const AmazonCognitoIdentity = Helpers.AmazonCognitoIdentity;
+let AmazonCognitoIdentity = require("amazon-cognito-identity-js");
 
 module.exports = (poolData, body, cb) => {
 
-  const userPool = new Helpers.userPool(poolData);
+  const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
   const attributes = body.attributes;
   const username = body.username;
