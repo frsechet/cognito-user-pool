@@ -46,6 +46,9 @@ let CognitoIdentityWrapper = {
     mfa: function(body, cb) {
       return require('./mfa')(this.Parent.poolData, body, cb);
     },
+    refreshSession: function(body, cb) {
+      return require('./refreshSession')(this.Parent.poolData, body, cb);
+    },
   },
   Init: function (poolData) {
     this.poolData = poolData;

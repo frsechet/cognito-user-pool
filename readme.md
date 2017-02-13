@@ -166,6 +166,33 @@ params: {
 }
 ```
 
+### Refresh Session
+
+Generate new refreshToken, idToken and accessToken with a new expiry date.
+
+```
+CognitoUserPoolWrapper.refreshSession(params, callback)
+```
+
+```
+params: {
+  "username": "string",
+  "password": "string"
+}
+```
+
+If successful, you retrieve 3 auth tokens and the associated expiration dates (same as login):
+
+```
+{
+  "refreshToken": "string",
+  "accessToken": "string",
+  "accessTokenExpiresAt": integer,
+  "idToken": "string",
+  "idTokenExpiresAt": integer
+}
+```
+
 ### Enable or Disable MFA
 
 ```
