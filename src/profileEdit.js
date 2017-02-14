@@ -37,7 +37,7 @@ module.exports = (poolData, body, cb) => {
         // if the attribute has a set value, update it with the new value
         else if (item.Value !== null) {
           let attribute = new AmazonCognitoIdentity.CognitoUserAttribute(item);
-          attributeList.push(attribute);
+          attributeUpdateList.push(attribute);
         }
 
         // otherwise, delete the attribute for that user
