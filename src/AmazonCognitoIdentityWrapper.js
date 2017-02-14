@@ -19,7 +19,7 @@ let CognitoIdentityWrapper = {
     loginMfa: function(body, cb) {
       return require('./loginMfa')(this.Parent.poolData, body, cb);
     },
-    loginPasswordResetRequired: function(body, cb) {
+    loginNewPasswordRequired: function(body, cb) {
       return require('./loginNewPasswordRequired')(this.Parent.poolData, body, cb);
     },
     logout: function(body, cb) {
