@@ -193,10 +193,25 @@ If successful, you retrieve 3 auth tokens and the associated expiration dates (s
 }
 ```
 
+### Get MFA status
+
+If MFA is enabled for this user, retrieve its options. Otherwise, returns `undefined`.
+
+```
+CognitoUserPoolWrapper.getMfa(params, callback)
+```
+
+```
+params: {
+  "username": "string",
+  "refreshToken": "string"
+}
+```
+
 ### Enable or Disable MFA
 
 ```
-CognitoUserPoolWrapper.mfa(params, callback)
+CognitoUserPoolWrapper.setMfa(params, callback)
 ```
 
 ```

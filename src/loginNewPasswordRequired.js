@@ -34,7 +34,7 @@ module.exports = (poolData, body, cb) => {
     },
     mfaRequired: function() {
       let data = {
-        requiresMfa: true,
+        nextStep: "MFA_AUTH",
         loginSession: cognitoUser.Session
       };
       return cb(null, data);

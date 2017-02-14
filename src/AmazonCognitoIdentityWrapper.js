@@ -43,8 +43,11 @@ let CognitoIdentityWrapper = {
     profileEditPhoneNumber: function(body, cb) {
       return require('./profileEditPhoneNumber')(this.Parent.poolData, body, cb);
     },
-    mfa: function(body, cb) {
-      return require('./mfa')(this.Parent.poolData, body, cb);
+    setMfa: function(body, cb) {
+      return require('./setMfa')(this.Parent.poolData, body, cb);
+    },
+    getMfa: function(body, cb) {
+      return require('./getMfa')(this.Parent.poolData, body, cb);
     },
     refreshSession: function(body, cb) {
       return require('./refreshSession')(this.Parent.poolData, body, cb);

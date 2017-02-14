@@ -21,9 +21,9 @@ module.exports = (poolData, body, cb) => {
     }
     cognitoUser.signInUserSession = userSession;
 
-    return cognitoUser.getUserAttributes(function (err, res) {
+    return cognitoUser.getMFAOptions((err, res) => {
       if (err) {
-        return cb(err);
+        return cb("rere");
       }
       return cb(null, res);
     });
