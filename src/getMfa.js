@@ -23,7 +23,10 @@ module.exports = (poolData, body, cb) => {
 
     return cognitoUser.getMFAOptions((err, res) => {
       if (err) {
-        return cb("rere");
+        return cb(err);
+      }
+      if (!res) {
+        res = null;
       }
       return cb(null, res);
     });

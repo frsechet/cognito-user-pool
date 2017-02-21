@@ -1,7 +1,7 @@
 {
   "name": "cognito-user-pool",
-  "version": "0.1.11",
-  "description": "(alpha) A simple Node.js library for managing your users on AWS Cognito User Pool",
+  "version": "0.1.12",
+  "description": "(beta) A simple Node.js library for managing your users on AWS Cognito User Pool",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
