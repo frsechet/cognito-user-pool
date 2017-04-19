@@ -56,7 +56,6 @@ let CognitoIdentityWrapper = {
   Init: function (poolData) {
     this.poolData = poolData;
     this.Methods.Parent = this;
-    delete this.Init;
     return this;
   }
 };
