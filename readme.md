@@ -177,7 +177,7 @@ CognitoUserPoolWrapper.refreshSession(params, callback)
 ```
 params: {
   "username": "string",
-  "password": "string"
+  "refreshToken": "string"
 }
 ```
 
