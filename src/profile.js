@@ -1,29 +1,28 @@
-"use strict";
-let AmazonCognitoIdentity = require("amazon-cognito-identity-js");
+import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
 
-module.exports = (poolData, body, cb) => {
+export default (poolData, body, cb) => {
 
   const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
   const username = body.username;
-  const refreshToken = new AmazonCognitoIdentity.CognitoRefreshToken({RefreshToken: body.refreshToken});
+  const refreshToken = new AmazonCognitoIdentity.CognitoRefreshToken({ RefreshToken: body.refreshToken });
 
   const userData = {
-    Username : username,
-    Pool : userPool
+    Username: username,
+    Pool: userPool,
   };
 
-  let cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+  const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
 
-  return cognitoUser.refreshSession(refreshToken, function(err, userSession) {
-    if (err) {
-      return cb(err);
+  return cognitoUser.refreshSession(refreshToken, (err1, userSession) => {
+    if (err1) {
+      return cb(err1);
     }
     cognitoUser.signInUserSession = userSession;
 
-    return cognitoUser.getUserAttributes(function (err, res) {
-      if (err) {
-        return cb(err);
+    return cognitoUser.getUserAttributes((err2, res) => {
+      if (err2) {
+        return cb(err2);
       }
       return cb(null, res);
     });

@@ -1,66 +1,83 @@
-"use strict";
+import login from './login';
+import signup from './signup';
+import signupConfirm from './signupConfirm';
+import signupResend from './signupResend';
+import loginMfa from './loginMfa';
+import loginNewPasswordRequired from './loginNewPasswordRequired';
+import logout from './logout';
+import passwordForgot from './passwordForgot';
+import passwordChange from './passwordChange';
+import passwordReset from './passwordReset';
+import profile from './profile';
+import profileEdit from './profileEdit';
+import profileEditPhoneNumber from './profileEditPhoneNumber';
+import setMfa from './setMfa';
+import getMfa from './getMfa';
+import refreshSession from './refreshSession';
 
-let AmazonCognitoIdentity = require("amazon-cognito-identity-js");
-let CognitoIdentityWrapper = {
-  poolData: null,
-  Methods: {
-    login: function (body, cb) {
-      return require('./login')(this.Parent.poolData, body, cb);
-    },
-    signup: function(body, cb) {
-      return require('./signup')(this.Parent.poolData, body, cb);
-    },
-    signupConfirm: function(body, cb) {
-      return require('./signupConfirm')(this.Parent.poolData, body, cb);
-    },
-    signupResend: function(body, cb) {
-      return require('./signupResend')(this.Parent.poolData, body, cb);
-    },
-    loginMfa: function(body, cb) {
-      return require('./loginMfa')(this.Parent.poolData, body, cb);
-    },
-    loginNewPasswordRequired: function(body, cb) {
-      return require('./loginNewPasswordRequired')(this.Parent.poolData, body, cb);
-    },
-    logout: function(body, cb) {
-      return require('./logout')(this.Parent.poolData, body, cb);
-    },
-    passwordForgot: function(body, cb) {
-      return require('./passwordForgot')(this.Parent.poolData, body, cb);
-    },
-    passwordReset: function(body, cb) {
-      return require('./passwordReset')(this.Parent.poolData, body, cb);
-    },
-    passwordChange: function(body, cb) {
-      return require('./passwordChange')(this.Parent.poolData, body, cb);
-    },
-    profile: function(body, cb) {
-      return require('./profile')(this.Parent.poolData, body, cb);
-    },
-    profileEdit: function(body, cb) {
-      return require('./profileEdit')(this.Parent.poolData, body, cb);
-    },
-    profileEditPhoneNumber: function(body, cb) {
-      return require('./profileEditPhoneNumber')(this.Parent.poolData, body, cb);
-    },
-    setMfa: function(body, cb) {
-      return require('./setMfa')(this.Parent.poolData, body, cb);
-    },
-    getMfa: function(body, cb) {
-      return require('./getMfa')(this.Parent.poolData, body, cb);
-    },
-    refreshSession: function(body, cb) {
-      return require('./refreshSession')(this.Parent.poolData, body, cb);
-    },
-  },
-  Init: function (poolData) {
+export default class CognitoIdentityWrapper {
+
+  /**
+   * @desc Wrapper constructor
+   * @param {{UserPoolId: string, ClientId: string, Paranoia: number}} poolData
+   */
+  constructor(poolData) {
+    if (!poolData) {
+      throw new Error('Missing poolData');
+    }
+    if (!poolData.UserPoolId || !poolData.ClientId || !poolData.Paranoia) {
+      throw new Error('Bad poolData object');
+    }
     this.poolData = poolData;
-    this.Methods.Parent = this;
-    return this;
   }
-};
 
-module.exports = function(poolData) {
-  CognitoIdentityWrapper.Init(poolData);
-  return CognitoIdentityWrapper.Methods;
-};
+  login(body, cb) {
+    return login(this.poolData, body, cb);
+  }
+  signup(body, cb) {
+    return signup(this.poolData, body, cb);
+  }
+  signupConfirm(body, cb) {
+    return signupConfirm(this.poolData, body, cb);
+  }
+  signupResend(body, cb) {
+    return signupResend(this.poolData, body, cb);
+  }
+  loginMfa(body, cb) {
+    return loginMfa(this.poolData, body, cb);
+  }
+  loginNewPasswordRequired(body, cb) {
+    return loginNewPasswordRequired(this.poolData, body, cb);
+  }
+  logout(body, cb) {
+    return logout(this.poolData, body, cb);
+  }
+  passwordForgot(body, cb) {
+    return passwordForgot(this.poolData, body, cb);
+  }
+  passwordReset(body, cb) {
+    return passwordReset(this.poolData, body, cb);
+  }
+  passwordChange(body, cb) {
+    return passwordChange(this.poolData, body, cb);
+  }
+  profile(body, cb) {
+    return profile(this.poolData, body, cb);
+  }
+  profileEdit(body, cb) {
+    return profileEdit(this.poolData, body, cb);
+  }
+  profileEditPhoneNumber(body, cb) {
+    return profileEditPhoneNumber(this.poolData, body, cb);
+  }
+  setMfa(body, cb) {
+    return setMfa(this.poolData, body, cb);
+  }
+  getMfa(body, cb) {
+    return getMfa(this.poolData, body, cb);
+  }
+  refreshSession(body, cb) {
+    return refreshSession(this.poolData, body, cb);
+  }
+
+}

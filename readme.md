@@ -10,14 +10,25 @@ At the root of your project, do:
 npm install --save cognito-user-pool
 ```
 
-Then in your project:
+Import it in your project:
+```
+import CognitoUserPoolWrapper from 'cognito-user-pool';
+```
+
+or in ES5:
+```
+const CognitoUserPoolWrapper = require('cognito-user-pool').default;
+```
+
+Then use it like so:
 ```
 const poolData = {
   UserPoolId : USER_POOL_ID, // your user pool ID
   ClientId : USER_POOL_CLIENT_ID, // generated in the AWS console
   Paranoia : PARANOIA_LEVEL // an integer between 1 - 10
 };
-let CognitoUserPoolWrapper = require('cognito-user-pool')(poolData);
+
+const userPool = new CognitoUserPoolWrapper(poolData);
 ```
 
 ## Methods
@@ -29,7 +40,7 @@ Actual data to pass to the function depends on your user pool settings.
 Signup a new user:
 
 ```
-CognitoUserPoolWrapper.signup(params, callback)
+userPool.signup(params, callback)
 ```
 
 
@@ -48,11 +59,11 @@ params: {
 
 ### Signup Confirmation
 
-Depending on your settings, email confirmation may be required.  
+Depending on your settings, email confirmation may be required.
 In that case, the following function must be called:
 
 ```
-CognitoUserPoolWrapper.signupConfirm(params, callback)
+userPool.signupConfirm(params, callback)
 ```
 
 ```
@@ -66,7 +77,7 @@ params: {
 
 If the user didn't receive the signup confirmation code, they may request a new code:
 
-```CognitoUserPoolWrapper.signupResend(params, callback)```
+```userPool.signupResend(params, callback)```
 
 ```
 params: {
@@ -79,7 +90,7 @@ params: {
 Login an existing and confirmed user:
 
 ```
-CognitoUserPoolWrapper.login(params, callback)
+userPool.login(params, callback)
 ```
 
 Note that username can be any alias field as defined in user pool settings.
@@ -92,7 +103,7 @@ params: {
 ```
 This function returns either authentication tokens (more on that later)
 or a custom challenge for continuing the authentication process.
- 
+
 In that case, you get:
 ```
 {
@@ -101,7 +112,7 @@ In that case, you get:
 }
 ```
 
-With `nextStep` being either `MFA_AUTH` or `NEW_PASSWORD_REQUIRED`.  
+With `nextStep` being either `MFA_AUTH` or `NEW_PASSWORD_REQUIRED`.
 `MFA_AUTH` means a SMS was sent to their cell phone with a code to add to the `loginMfa` method,
 while `NEW_PASSWORD_REQUIRED` means they need to reset their password in the next step with `loginNewPasswordRequired`.
 
@@ -124,7 +135,7 @@ The token you will need to authenticate against this module later on is `refresh
 Using the information from the `login` method and the `mfaCode` received by SMS:
 
 ```
-CognitoUserPoolWrapper.loginMfa(params, callback)
+userPool.loginMfa(params, callback)
 ```
 
 ```
@@ -140,7 +151,7 @@ params: {
 Using the information from the `login` method:
 
 ```
-CognitoUserPoolWrapper.loginNewPasswordRequired(params, callback)
+userPool.loginNewPasswordRequired(params, callback)
 ```
 
 ```
@@ -156,7 +167,7 @@ params: {
 This method invalidates all issued tokens.
 
 ```
-CognitoUserPoolWrapper.logout(params, callback)
+userPool.logout(params, callback)
 ```
 
 ```
@@ -171,7 +182,7 @@ params: {
 Generate new refreshToken, idToken and accessToken with a new expiry date.
 
 ```
-CognitoUserPoolWrapper.refreshSession(params, callback)
+userPool.refreshSession(params, callback)
 ```
 
 ```
@@ -198,7 +209,7 @@ If successful, you retrieve 3 auth tokens and the associated expiration dates (s
 If MFA is enabled for this user, retrieve its options. Otherwise, returns `undefined`.
 
 ```
-CognitoUserPoolWrapper.getMfa(params, callback)
+userPool.getMfa(params, callback)
 ```
 
 ```
@@ -211,7 +222,7 @@ params: {
 ### Enable or Disable MFA
 
 ```
-CognitoUserPoolWrapper.setMfa(params, callback)
+userPool.setMfa(params, callback)
 ```
 
 ```
@@ -227,7 +238,7 @@ params: {
 Retrieve all attributes associated with this user.
 
 ```
-CognitoUserPoolWrapper.profile(params, callback)
+userPool.profile(params, callback)
 ```
 
 ```
@@ -242,10 +253,10 @@ params: {
 Use this endpoint to edit all user attributes except phone (see below).
 
 ```
-CognitoUserPoolWrapper.profileEdit(params, callback)
+userPool.profileEdit(params, callback)
 ```
 
-If the `Value` of an attribute is left empty, that attribute will be removed. 
+If the `Value` of an attribute is left empty, that attribute will be removed.
 
 ```
 params: {
@@ -265,7 +276,7 @@ params: {
 Use this endpoint to change the user's phone number.
 
 ```
-CognitoUserPoolWrapper.profileEditPhoneNumber(params, callback)
+userPool.profileEditPhoneNumber(params, callback)
 ```
 
 If `phone_number` is undefined or null, it will be removed and MFA will be disabled on this user.
@@ -283,7 +294,7 @@ params: {
 Use this endpoint to change the user's password.
 
 ```
-CognitoUserPoolWrapper.passwordChange(params, callback)
+userPool.passwordChange(params, callback)
 ```
 
 ```
@@ -297,12 +308,12 @@ params: {
 
 ### Forgot password
 
-Start a forgot password flow.  
+Start a forgot password flow.
 Cognito will send a `passwordResetCode` to one of the user's confirmed contact methods (email or SMS)
 to be used in the `passwordReset` method below.
 
 ```
-CognitoUserPoolWrapper.passwordForgot(params, callback)
+userPool.passwordForgot(params, callback)
 ```
 
 ```
@@ -313,10 +324,10 @@ params: {
 
 ### Reset password
 
-Finish the forgot password flow.  
+Finish the forgot password flow.
 
 ```
-CognitoUserPoolWrapper.passwordReset(params, callback)
+userPool.passwordReset(params, callback)
 ```
 
 ```
@@ -326,3 +337,22 @@ params: {
   "newPassword": "string
 }
 ```
+
+## Release notes
+
+### v1.0 Breaking changes
+
+- Project rewritten in ES6: new init method. See above for setup instructions. Nothing else changed, so it doesn't require much to upgrade. Otherwise stick with v0.x.
+
+
+### Next goals
+
+- Add support for Promises (omitting the callback parameter returns a promise)
+- Add support for social login / OAuth / SAML out of the box
+
+### Contributing
+
+Coding style is enforced by eslint. You can test your code by running `npm run eslint`. See .eslintrc for common rules.
+No test suite is there yet, so feel free to add one :-)
+
+To help with development, run `npm run dev` to transpile the ES6 files in `src/` on any code change.

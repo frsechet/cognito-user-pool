@@ -1,7 +1,6 @@
-"use strict";
-let AmazonCognitoIdentity = require("amazon-cognito-identity-js");
+import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
 
-module.exports = (poolData, body, cb) => {
+export default (poolData, body, cb) => {
 
   const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
@@ -10,19 +9,19 @@ module.exports = (poolData, body, cb) => {
   const newPassword = body.newPassword;
 
   const userData = {
-    Username : username,
-    Pool : userPool
+    Username: username,
+    Pool: userPool,
   };
 
-  let cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+  const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
 
   return cognitoUser.confirmPassword(passwordResetCode, newPassword, {
-    onSuccess: function (res) {
-      return cb(null, res || "SUCCESS");
+    onSuccess(res) {
+      return cb(null, res || 'SUCCESS');
     },
-    onFailure: function(err) {
+    onFailure(err) {
       return cb(err);
-    }
+    },
   });
 
 };
