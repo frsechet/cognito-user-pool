@@ -1,15 +1,28 @@
 {
   "name": "cognito-user-pool",
   "version": "0.1.12",
-  "description": "(beta) A simple Node.js library for managing your users on AWS Cognito User Pool",
-  "main": "index.js",
+  "description": "A simple Node.js library for managing your users on AWS Cognito User Pool",
+  "main": "./dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "babel src/ -d dist/",
+    "prepublish": "npm run build",
+    "dev": "babel -w src/ -d dist/",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "eslint:fix": "eslint src --fix",
+    "eslint": "eslint src"
   },
-  "author": "",
+  "author": "Francois Falala-Sechet <francois@clevy.io>",
   "license": "ISC",
   "dependencies": {
     "amazon-cognito-identity-js": "^1.12.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "eslint": "^4.3.0",
+    "eslint-config-airbnb-base": "^11.3.1",
+    "eslint-plugin-eslint-snake-case": "0.0.6",
+    "eslint-plugin-import": "^2.7.0"
   },
   "repository": {
     "type": "git",
