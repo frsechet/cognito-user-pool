@@ -18,7 +18,7 @@ module.exports = (poolData, body, cb) => {
   // update cognitoUser Session with the Session of the NEW_PASSWORD_REQUIRED request
   cognitoUser.Session = loginSession;
 
-  return cognitoUser.completeNewPasswordChallenge(newPassword, {}, {
+  return cognitoUser.completeNewPasswordChallenge(newPassword, body.attributes, {
     onSuccess: function (result) {
       let data = {
         refreshToken: result.getRefreshToken().getToken(),
