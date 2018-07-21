@@ -14,5 +14,15 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/frsechet/cognito-user-pool"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.2.6",
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^17.0.0",
+    "eslint-config-airbnb-base": "^13.0.0",
+    "eslint-plugin-eslint-snake-case": "0.0.6",
+    "eslint-plugin-import": "^2.13.0"
   }
 }

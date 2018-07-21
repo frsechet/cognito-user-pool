@@ -1,66 +1,79 @@
-"use strict";
+const CognitoItentityMethods = require('./methods');
 
-let AmazonCognitoIdentity = require("amazon-cognito-identity-js");
-let CognitoIdentityWrapper = {
-  poolData: null,
-  Methods: {
-    login: function (body, cb) {
-      return require('./login')(this.Parent.poolData, body, cb);
-    },
-    signup: function(body, cb) {
-      return require('./signup')(this.Parent.poolData, body, cb);
-    },
-    signupConfirm: function(body, cb) {
-      return require('./signupConfirm')(this.Parent.poolData, body, cb);
-    },
-    signupResend: function(body, cb) {
-      return require('./signupResend')(this.Parent.poolData, body, cb);
-    },
-    loginMfa: function(body, cb) {
-      return require('./loginMfa')(this.Parent.poolData, body, cb);
-    },
-    loginNewPasswordRequired: function(body, cb) {
-      return require('./loginNewPasswordRequired')(this.Parent.poolData, body, cb);
-    },
-    logout: function(body, cb) {
-      return require('./logout')(this.Parent.poolData, body, cb);
-    },
-    passwordForgot: function(body, cb) {
-      return require('./passwordForgot')(this.Parent.poolData, body, cb);
-    },
-    passwordReset: function(body, cb) {
-      return require('./passwordReset')(this.Parent.poolData, body, cb);
-    },
-    passwordChange: function(body, cb) {
-      return require('./passwordChange')(this.Parent.poolData, body, cb);
-    },
-    profile: function(body, cb) {
-      return require('./profile')(this.Parent.poolData, body, cb);
-    },
-    profileEdit: function(body, cb) {
-      return require('./profileEdit')(this.Parent.poolData, body, cb);
-    },
-    profileEditPhoneNumber: function(body, cb) {
-      return require('./profileEditPhoneNumber')(this.Parent.poolData, body, cb);
-    },
-    setMfa: function(body, cb) {
-      return require('./setMfa')(this.Parent.poolData, body, cb);
-    },
-    getMfa: function(body, cb) {
-      return require('./getMfa')(this.Parent.poolData, body, cb);
-    },
-    refreshSession: function(body, cb) {
-      return require('./refreshSession')(this.Parent.poolData, body, cb);
-    },
-  },
-  Init: function (poolData) {
-    this.poolData = poolData;
+class CognitoIdentityWrapper {
+
+  constructor(poolData) {
+    this.poolData = poolData || null;
     this.Methods.Parent = this;
     return this;
   }
-};
 
-module.exports = function(poolData) {
-  CognitoIdentityWrapper.Init(poolData);
-  return CognitoIdentityWrapper.Methods;
+  login(body, cb) {
+    return CognitoItentityMethods.login(this.poolData, body, cb);
+  }
+
+  signup(body, cb) {
+    return CognitoItentityMethods.signup(this.poolData, body, cb);
+  }
+
+  signupConfirm(body, cb) {
+    return CognitoItentityMethods.signupConfirm(this.poolData, body, cb);
+  }
+
+  signupResend(body, cb) {
+    return CognitoItentityMethods.signupResend(this.poolData, body, cb);
+  }
+
+  loginMfa(body, cb) {
+    return CognitoItentityMethods.loginMfa(this.poolData, body, cb);
+  }
+
+  loginNewPasswordRequired(body, cb) {
+    return CognitoItentityMethods.loginNewPasswordRequired(this.poolData, body, cb);
+  }
+
+  logout(body, cb) {
+    return CognitoItentityMethods.logout(this.poolData, body, cb);
+  }
+
+  passwordForgot(body, cb) {
+    return CognitoItentityMethods.passwordForgot(this.poolData, body, cb);
+  }
+
+  passwordReset(body, cb) {
+    return CognitoItentityMethods.passwordReset(this.poolData, body, cb);
+  }
+
+  passwordChange(body, cb) {
+    return CognitoItentityMethods.passwordChange(this.poolData, body, cb);
+  }
+
+  profile(body, cb) {
+    return CognitoItentityMethods.profile(this.poolData, body, cb);
+  }
+
+  profileEdit(body, cb) {
+    return CognitoItentityMethods.profileEdit(this.poolData, body, cb);
+  }
+
+  profileEditPhoneNumber(body, cb) {
+    return CognitoItentityMethods.profileEditPhoneNumber(this.poolData, body, cb);
+  }
+
+  setMfa(body, cb) {
+    return CognitoItentityMethods.setMfa(this.poolData, body, cb);
+  }
+
+  getMfa(body, cb) {
+    return CognitoItentityMethods.getMfa(this.poolData, body, cb);
+  }
+
+  refreshSession(body, cb) {
+    return CognitoItentityMethods.refreshSession(this.poolData, body, cb);
+  }
+
+}
+
+module.exports = function Wrapper(poolData) {
+  return new CognitoIdentityWrapper(poolData);
 };
