@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo 'No tests for now' && exit 0"
   },
-  "author": "",
+  "author": "François Falala-Sechet <francois@clevy.io>",
   "license": "ISC",
   "dependencies": {
     "amazon-cognito-identity-js": "^1.31.0"
