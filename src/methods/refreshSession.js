@@ -1,6 +1,13 @@
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
 
-module.exports = (poolData, body, cb) => {
+/**
+ * Refresh a user's session (retrieve refreshed tokens)
+ *
+ * @param {*} poolData
+ * @param {{username, refreshToken}} body
+ * @param {*} cb
+ */
+async function refreshSession(poolData, body, cb) {
 
   const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
@@ -14,11 +21,8 @@ module.exports = (poolData, body, cb) => {
 
   const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
 
-  return cognitoUser.refreshSession(refreshToken, (err, res) => {
-
-    if (err) {
-      return cb(err);
-    }
+  cognitoUser.refreshSession(refreshToken, (err, res) => {
+    if (err) cb(err);
 
     const data = {
       refreshToken: res.getRefreshToken().getToken(),
@@ -27,7 +31,9 @@ module.exports = (poolData, body, cb) => {
       idToken: res.getIdToken().getJwtToken(),
       idTokenExpiresAt: res.getAccessToken().getExpiration(),
     };
-    return cb(null, data);
+    cb(null, data);
   });
 
-};
+}
+
+module.exports = refreshSession;

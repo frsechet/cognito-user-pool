@@ -1,8 +1,13 @@
-
-
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
 
-module.exports = (poolData, body, cb) => {
+/**
+ * Confirm the signup action
+ *
+ * @param {*} poolData
+ * @param {{username, confirmationCode}} body
+ * @param {*} cb
+ */
+function signupConfirm(poolData, body, cb) {
 
   const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
@@ -17,4 +22,6 @@ module.exports = (poolData, body, cb) => {
 
   cognitoUser.confirmRegistration(confirmationCode, true, (err, res) => cb(err, res));
 
-};
+}
+
+module.exports = signupConfirm;

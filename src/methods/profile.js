@@ -1,26 +1,22 @@
-const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
+const Helpers = require('../helpers');
 
-module.exports = (poolData, body, cb) => {
+/**
+ * Return the user's profile attributes
+ *
+ * @param {poolData} poolData
+ * @param {{username, refreshToken, accessToken, idToken}} body
+ * @param {*} cb
+ */
+async function profile(poolData, body, cb) {
+  try {
+    const cognitoUser = await Helpers.getCognitoUser(poolData, body);
 
-  const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+    cognitoUser.getUserAttributes((err, res) => cb(err, res));
+  }
+  catch (err) {
+    cb(err);
+  }
 
-  const { username } = body;
-  const refreshToken = new AmazonCognitoIdentity.CognitoRefreshToken({ RefreshToken: body.refreshToken });
+}
 
-  const userData = {
-    Username: username,
-    Pool: userPool,
-  };
-
-  const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
-
-  return cognitoUser.refreshSession(refreshToken, (err, userSession) => {
-    if (err) return cb(err);
-
-    cognitoUser.signInUserSession = userSession;
-
-    return cognitoUser.getUserAttributes((err2, res) => cb(err2, res));
-
-  });
-
-};
+module.exports = profile;

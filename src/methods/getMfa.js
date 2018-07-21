@@ -1,30 +1,23 @@
-const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
+const Helpers = require('../helpers');
 
-module.exports = (poolData, body, cb) => {
+/**
+ * Return the user's MFA status
+ *
+ * @param {poolData} poolData
+ * @param {{username, refreshToken, accessToken, idToken}} body
+ * @param {*} cb
+ */
+async function getMFA(poolData, body, cb) {
+  try {
+    const cognitoUser = await Helpers.getCognitoUser(poolData, body);
 
-  const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+    // when MFA is off, res is undefined. We want to cast it as null instead.
+    cognitoUser.getMFAOptions((err, res) => cb(err, res || null));
+  }
+  catch (err) {
+    cb(err);
+  }
 
-  const { username } = body;
-  const refreshToken = new AmazonCognitoIdentity.CognitoRefreshToken({ RefreshToken: body.refreshToken });
+}
 
-  const userData = {
-    Username: username,
-    Pool: userPool,
-  };
-
-  const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
-
-  return cognitoUser.refreshSession(refreshToken, (err, userSession) => {
-    if (err) return cb(err);
-    cognitoUser.signInUserSession = userSession;
-
-    return cognitoUser.getMFAOptions((err2, res) => {
-      if (err2) return cb(err2);
-
-      // in some cases, res is undefined. We want to cast it as null
-      return cb(null, res || null);
-    });
-
-  });
-
-};
+module.exports = getMFA;

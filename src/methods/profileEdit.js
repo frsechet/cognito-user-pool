@@ -1,38 +1,31 @@
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
+const Helpers = require('../helpers');
 
-module.exports = (poolData, body, cb) => {
-
-  const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
-
-  const { username, attributes } = body;
-  const refreshToken = new AmazonCognitoIdentity.CognitoRefreshToken({ RefreshToken: body.refreshToken });
-
-  const userData = {
-    Username: username,
-    Pool: userPool,
-  };
-
-  const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
-
-  return cognitoUser.refreshSession(refreshToken, (err, userSession) => {
-    if (err) {
-      return cb(err);
-    }
-    cognitoUser.signInUserSession = userSession;
+/**
+ * Edit a user's profile
+ *
+ * @param {poolData} poolData
+ * @param {{username, refreshToken, accessToken, idToken, attributes}} body
+ * @param {*} cb
+ */
+async function editProfile(poolData, body, cb) {
+  try {
+    const { attributes } = body;
+    const cognitoUser = await Helpers.getCognitoUser(poolData, body);
 
     const attributeUpdateList = [];
     const attributeDeleteList = [];
 
-    if (attributes) {
+    if (Array.isArray(attributes)) {
       attributes.forEach((item) => {
 
-        // if the attribute concerns the phone number
+      // if the attribute concerns the phone number
         if (item.Name === 'phone_number') {
-          // do nothing, rather use profileEditPhoneNumber
-          // as there are some additionals checks concerning MFA to perform
+        // do nothing, rather use profileEditPhoneNumber
+        // as there are some additionals checks concerning MFA to perform
         }
 
-        // if the attribute has a set value, update it with the new value
+        // if the attribute has a value, update it with the new value
         else if (item.Value !== null) {
           const attribute = new AmazonCognitoIdentity.CognitoUserAttribute(item);
           attributeUpdateList.push(attribute);
@@ -45,15 +38,26 @@ module.exports = (poolData, body, cb) => {
       });
     }
 
-    // first, update the new params
-    return cognitoUser.updateAttributes(attributeUpdateList, (err2) => {
-      if (err2) return cb(err2);
-
-      // now, delete the params that need to be deleted
-      return cognitoUser.deleteAttributes(attributeDeleteList, (err3, res) => cb(err3, res));
-
+    // first, update requested attributes
+    await new Promise((resolve, reject) => {
+      cognitoUser.updateAttributes(attributeUpdateList, (err) => {
+        if (err) return reject(err);
+        return resolve();
+      });
     });
 
-  });
+    // then, delete requested attributes
+    const data = await new Promise((resolve, reject) => {
+      cognitoUser.deleteAttributes(attributeDeleteList, (err, res) => {
+        if (err) return reject(err);
+        return resolve(res);
+      });
+    });
 
-};
+    cb(null, data);
+  }
+  catch (err) {
+    cb(err);
+  }
+}
+module.exports = editProfile;

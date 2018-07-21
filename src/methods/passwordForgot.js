@@ -1,6 +1,13 @@
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
 
-module.exports = (poolData, body, cb) => {
+/**
+ * Initiate forgot password flow
+ *
+ * @param {*} poolData
+ * @param {{username}} body
+ * @param {*} cb
+ */
+async function forgotPassword(poolData, body, cb) {
 
   const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
@@ -13,13 +20,15 @@ module.exports = (poolData, body, cb) => {
 
   const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
 
-  return cognitoUser.forgotPassword({
+  cognitoUser.forgotPassword({
     onFailure(err) {
-      return cb(err);
+      cb(err);
     },
     inputVerificationCode(res) {
-      return cb(null, res);
+      cb(null, res);
     },
   });
 
-};
+}
+
+module.exports = forgotPassword;

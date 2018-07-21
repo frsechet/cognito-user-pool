@@ -1,6 +1,13 @@
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
 
-module.exports = (poolData, body, cb) => {
+/**
+ * Login user
+ *
+ * @param {*} poolData
+ * @param {{username, password}} body
+ * @param {*} cb
+ */
+function login(poolData, body, cb) {
 
   const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
@@ -18,7 +25,7 @@ module.exports = (poolData, body, cb) => {
 
   const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
 
-  return cognitoUser.authenticateUser(authenticationDetails, {
+  cognitoUser.authenticateUser(authenticationDetails, {
     onSuccess(res) {
       const data = {
         refreshToken: res.getRefreshToken().getToken(),
@@ -27,25 +34,27 @@ module.exports = (poolData, body, cb) => {
         idToken: res.getIdToken().getJwtToken(),
         idTokenExpiresAt: res.getAccessToken().getExpiration(),
       };
-      return cb(null, data);
+      cb(null, data);
     },
     onFailure(err) {
-      return cb(err);
+      cb(err);
     },
     mfaRequired() {
       const data = {
         nextStep: 'MFA_AUTH',
         loginSession: cognitoUser.Session,
       };
-      return cb(null, data);
+      cb(null, data);
     },
     newPasswordRequired() {
       const data = {
         nextStep: 'NEW_PASSWORD_REQUIRED',
         loginSession: cognitoUser.Session,
       };
-      return cb(null, data);
+      cb(null, data);
     },
   });
 
-};
+}
+
+module.exports = login;

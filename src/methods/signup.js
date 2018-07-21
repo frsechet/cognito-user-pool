@@ -1,6 +1,13 @@
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
 
-module.exports = (poolData, body, cb) => {
+/**
+ * Signup user
+ *
+ * @param {poolData} poolData
+ * @param {{ username: string, password: string, attributes: attributesModel }} body
+ * @param {*} cb
+ */
+function signup(poolData, body, cb) {
 
   const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
@@ -8,11 +15,8 @@ module.exports = (poolData, body, cb) => {
 
   const attributesList = [];
 
-  if (attributes) {
-    attributes.forEach((item) => {
-      const attribute = new AmazonCognitoIdentity.CognitoUserAttribute(item);
-      attributesList.push(attribute);
-    });
+  if (Array.isArray(attributes)) {
+    attributesList.push(...attributes.map(item => new AmazonCognitoIdentity.CognitoUserAttribute(item)));
   }
 
   userPool.signUp(username, password, attributesList, null, (err, res) => {
@@ -22,8 +26,9 @@ module.exports = (poolData, body, cb) => {
     const data = {
       username: cognitoUser.getUsername(),
     };
-    return cb(null, data);
-
+    cb(null, data);
   });
 
-};
+}
+
+module.exports = signup;

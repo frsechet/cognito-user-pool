@@ -1,6 +1,13 @@
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
 
-module.exports = (poolData, body, cb) => {
+/**
+ * Login 2nd step for users with MFA enabled
+ *
+ * @param {*} poolData
+ * @param {{ username, mfaCode, loginSession }} body
+ * @param {*} cb
+ */
+function loginMfa(poolData, body, cb) {
 
   const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
@@ -25,11 +32,13 @@ module.exports = (poolData, body, cb) => {
         idToken: result.getIdToken().getJwtToken(),
         idTokenExpiresAt: result.getAccessToken().getExpiration(),
       };
-      return cb(null, data);
+      cb(null, data);
     },
     onFailure(err) {
-      return cb(err);
+      cb(err);
     },
   });
 
-};
+}
+
+module.exports = loginMfa;

@@ -1,31 +1,28 @@
-const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
+const Helpers = require('../helpers');
 
-module.exports = (poolData, body, cb) => {
+/**
+ * Return the user's MFA status (must have a phone_number set)
+ *
+ * @param {poolData} poolData
+ * @param {{username, refreshToken, accessToken, idToken}} body
+ * @param {*} cb
+ */
+async function setMfa(poolData, body, cb) {
+  try {
+    const { enableMfa = false } = body;
+    const cognitoUser = await Helpers.getCognitoUser(poolData, body);
 
-  const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
-
-  const { username, enableMfa } = body;
-  const refreshToken = new AmazonCognitoIdentity.CognitoRefreshToken({ RefreshToken: body.refreshToken });
-
-  const userData = {
-    Username: username,
-    Pool: userPool,
-  };
-
-  const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
-
-  return cognitoUser.refreshSession(refreshToken, (err, userSession) => {
-    if (err) {
-      return cb(err);
-    }
-
-    cognitoUser.signInUserSession = userSession;
     if (enableMfa === true) {
-      return cognitoUser.enableMFA((err2, res) => cb(err2, res));
+      cognitoUser.enableMFA((err, res) => cb(err, res));
     }
+    else {
+      cognitoUser.disableMFA((err, res) => cb(err, res));
+    }
+  }
+  catch (err) {
+    cb(err);
+  }
 
-    return cognitoUser.disableMFA((err2, res) => cb(err2, res));
+}
 
-  });
-
-};
+module.exports = setMfa;

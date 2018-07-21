@@ -1,6 +1,13 @@
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
 
-module.exports = (poolData, body, cb) => {
+/**
+ * Login user after they set a new password, if a new password is required
+ *
+ * @param {*} poolData
+ * @param {{ username, loginSession, newPassword }} body
+ * @param {*} cb
+ */
+function loginNewPasswordRequired(poolData, body, cb) {
 
   const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
@@ -15,7 +22,7 @@ module.exports = (poolData, body, cb) => {
   // update cognitoUser Session with the Session of the NEW_PASSWORD_REQUIRED request
   cognitoUser.Session = loginSession;
 
-  return cognitoUser.completeNewPasswordChallenge(newPassword, {}, {
+  cognitoUser.completeNewPasswordChallenge(newPassword, {}, {
     onSuccess(result) {
       const data = {
         refreshToken: result.getRefreshToken().getToken(),
@@ -24,18 +31,19 @@ module.exports = (poolData, body, cb) => {
         idToken: result.getIdToken().getJwtToken(),
         idTokenExpiresAt: result.getAccessToken().getExpiration(),
       };
-      return cb(null, data);
+      cb(null, data);
     },
     onFailure(err) {
-      return cb(err);
+      cb(err);
     },
     mfaRequired() {
       const data = {
         nextStep: 'MFA_AUTH',
         loginSession: cognitoUser.Session,
       };
-      return cb(null, data);
+      cb(null, data);
     },
   });
 
-};
+}
+module.exports = loginNewPasswordRequired;

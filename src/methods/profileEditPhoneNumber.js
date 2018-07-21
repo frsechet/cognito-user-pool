@@ -1,49 +1,45 @@
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
+const Helpers = require('../helpers');
 
-module.exports = (poolData, body, cb) => {
 
-  const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+/**
+ * Edit a user's phone number
+ *
+ * @param {poolData} poolData
+ * @param {{username, refreshToken, accessToken, idToken}} body
+ * @param {*} cb
+ */
+async function editPhoneNumber(poolData, body, cb) {
+  try {
+    const cognitoUser = await Helpers.getCognitoUser(poolData, body);
+    const { phone_number } = body;
 
-  const { username, phone_number } = body;
-  const refreshToken = new AmazonCognitoIdentity.CognitoRefreshToken({ RefreshToken: body.refreshToken });
-
-  const userData = {
-    Username: username,
-    Pool: userPool,
-  };
-
-  const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
-
-  // refresh the user session before anything else
-  return cognitoUser.refreshSession(refreshToken, (err, userSession) => {
-    if (err) {
-      return cb(err);
-    }
-    cognitoUser.signInUserSession = userSession;
-
-    const attributeList = [];
-
-    // the user wants to add or change their phone number (required for MFA)
+    // the user simply wants to add or change their phone number (required for MFA)
     if (phone_number) {
       const dataPhoneNumber = {
         Name: 'phone_number',
         Value: phone_number,
       };
       const attributePhoneNumber = new AmazonCognitoIdentity.CognitoUserAttribute(dataPhoneNumber);
-      attributeList.push(attributePhoneNumber);
-      return cognitoUser.updateAttributes(attributeList, (err2, res) => cb(err2, res));
+      cognitoUser.updateAttributes([attributePhoneNumber], (err, res) => cb(err, res));
     }
 
-    // if the user wants to delete their phone number
-    // it also means that we must disable MFA
+    else {
+      // if the user wants to delete their phone number we must first disable MFA
+      await new Promise((resolve, reject) => {
+        cognitoUser.disableMFA((err) => {
+          if (err) return reject(err);
+          return resolve();
+        });
+      });
+      cognitoUser.deleteAttributes(['phone_number'], (err, res) => cb(err, res));
+    }
 
-    attributeList.push('phone_number');
-    return cognitoUser.disableMFA((err2) => {
-      if (err2) return cb(err2);
+  }
+  catch (err) {
+    cb(err);
+  }
 
-      return cognitoUser.deleteAttributes(attributeList, (err3, res) => cb(err3, res));
-    });
+}
 
-  });
-
-};
+module.exports = editPhoneNumber;
