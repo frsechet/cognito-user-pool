@@ -2,9 +2,10 @@
   "name": "cognito-user-pool",
   "version": "0.1.12",
   "description": "(beta) A simple Node.js library for managing your users on AWS Cognito User Pool",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "babel src -d dist",
+    "test": "npm run build && node test"
   },
   "author": "",
   "license": "ISC",

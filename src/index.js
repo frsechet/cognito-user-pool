@@ -4,7 +4,6 @@ class CognitoIdentityWrapper {
 
   constructor(poolData) {
     this.poolData = poolData || null;
-    this.Methods.Parent = this;
     return this;
   }
 

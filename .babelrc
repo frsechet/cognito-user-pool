@@ -1,0 +1,18 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "node": "8.11"
+        }
+      }
+    ]
+  ],
+  "ignore": [
+    ".git",
+    "test",
+    "dist",
+    "node_modules",
+  ]
+}
