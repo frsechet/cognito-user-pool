@@ -13,9 +13,9 @@ npm install --save cognito-user-pool
 Then in your project:
 ```
 const poolData = {
-  UserPoolId : USER_POOL_ID, // your user pool ID
-  ClientId : USER_POOL_CLIENT_ID, // generated in the AWS console
-  Paranoia : PARANOIA_LEVEL // an integer between 1 - 10
+  UserPoolId: USER_POOL_ID, // your user pool ID
+  ClientId: USER_POOL_CLIENT_ID, // generated in the AWS console
+  Paranoia: PARANOIA_LEVEL // an integer between 1 - 10
 };
 let CognitoUserPoolWrapper = require('cognito-user-pool')(poolData);
 ```
@@ -109,7 +109,8 @@ If authentication was successful, you retrieve instead 3 auth tokens and the ass
 
 ```
 {
-  "refreshToken": "string",
+  "idToken": "string",
+  "accessToken": "string",
   "accessToken": "string",
   "accessTokenExpiresAt": integer,
   "idToken": "string",
@@ -117,7 +118,8 @@ If authentication was successful, you retrieve instead 3 auth tokens and the ass
 }
 ```
 Please read [https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-with-identity-providers.html] for more information.
-The token you will need to authenticate against this module later on is `refreshToken`.
+
+You can use either `{ idToken, accessToken }` or `{ refreshToken }` to authenticate your user later on. For the sake of the example, we will use `{ idToken, accessToken }` in this readme, but both ways work interchangeably (and as a side note, it is better to use idToken + accessToken wherever possible).
 
 ### Login: MFA
 
@@ -162,7 +164,8 @@ CognitoUserPoolWrapper.logout(params, callback)
 ```
 params: {
   "username": "string",
-  "refreshToken": "string"
+  "idToken": "string",
+  "accessToken": "string"
 }
 ```
 
@@ -177,7 +180,8 @@ CognitoUserPoolWrapper.refreshSession(params, callback)
 ```
 params: {
   "username": "string",
-  "refreshToken": "string"
+  "idToken": "string",
+  "accessToken": "string"
 }
 ```
 
@@ -204,7 +208,8 @@ CognitoUserPoolWrapper.getMfa(params, callback)
 ```
 params: {
   "username": "string",
-  "refreshToken": "string"
+  "idToken": "string",
+  "accessToken": "string"
 }
 ```
 
@@ -218,7 +223,8 @@ CognitoUserPoolWrapper.setMfa(params, callback)
 params: {
   "enableMfa": boolean,
   "username": "string",
-  "refreshToken": "string"
+  "idToken": "string",
+  "accessToken": "string"
 }
 ```
 
@@ -233,7 +239,8 @@ CognitoUserPoolWrapper.profile(params, callback)
 ```
 params: {
   "username": "string",
-  "refreshToken": "string"
+  "idToken": "string",
+  "accessToken": "string"
 }
 ```
 
@@ -250,7 +257,8 @@ If the `Value` of an attribute is left empty, that attribute will be removed.
 ```
 params: {
   "username": "string",
-  "refreshToken": "string",
+  "idToken": "string",
+  "accessToken": "string",
   "attributes": [
     {
       "Name": "string",
@@ -273,7 +281,8 @@ If `phone_number` is undefined or null, it will be removed and MFA will be disab
 ```
 params: {
   "username": "string",
-  "refreshToken": "string",
+  "idToken": "string",
+  "accessToken": "string",
   "phone_number: "string"
 }
 ```
@@ -289,7 +298,8 @@ CognitoUserPoolWrapper.passwordChange(params, callback)
 ```
 params: {
   "username": "string",
-  "refreshToken": "string",
+  "idToken": "string",
+  "accessToken": "string",
   "oldPassword": "string",
   "newPassword: "string"
 }
