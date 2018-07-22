@@ -3,6 +3,10 @@
 This library is a wrapper around the javascript frontend library aws-cognito-identity-js
 to easily manage your Cognito User Pool in a node.js backend environment.
 
+## Note
+
+This library was first developed when Cognito was still relatively new and complex to use from the backend. The situation improved greatly though, and it is probably better to use standard AWS SDKs now. If you are looking for something simple, you can use this. If you want to use the full power of Amazon Cognito, you should probably use the official AWS SDKs.
+
 ## Usage
 
 At the root of your project, do:
@@ -199,7 +203,7 @@ If successful, you retrieve 3 auth tokens and the associated expiration dates (s
 
 ### Get MFA status
 
-If MFA is enabled for this user, retrieve its options. Otherwise, returns `undefined`.
+If MFA is enabled for this user, retrieve its options. Otherwise, returns `null`.
 
 ```
 CognitoUserPoolWrapper.getMfa(params, callback)
@@ -276,7 +280,7 @@ Use this endpoint to change the user's phone number.
 CognitoUserPoolWrapper.profileEditPhoneNumber(params, callback)
 ```
 
-If `phone_number` is undefined or null, it will be removed and MFA will be disabled on this user.
+If `phone_number` is undefined or null, it will be removed and MFA will be disabled for this user.
 
 ```
 params: {
@@ -336,3 +340,7 @@ params: {
   "newPassword": "string
 }
 ```
+
+### Error codes
+
+The error codes are the standard error codes as returned by AWS Cognito: `https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/CommonErrors.html`

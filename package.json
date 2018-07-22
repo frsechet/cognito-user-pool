@@ -1,10 +1,10 @@
 {
   "name": "cognito-user-pool",
   "version": "0.2.0",
-  "description": "(beta) A simple Node.js library for managing your users on AWS Cognito User Pool",
+  "description": "A simple Node.js library for managing users on Amazon Cognito User Pool",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo 'No tests for now' && exit 0"
+    "test": "echo 'Sorry, no tests for now, but open to PRs :-)' && exit 0"
   },
   "author": "François Falala-Sechet <francois@clevy.io>",
   "license": "ISC",
