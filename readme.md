@@ -1,11 +1,12 @@
 # Easily manage your users with AWS Cognito User Pools
 
-This library is a wrapper around the javascript frontend library aws-cognito-identity-js
-to easily manage your Cognito User Pool in a node.js backend environment.
+This library is a wrapper around the client library aws-cognito-identity-js to easily manage your Cognito User Pool in a node.js backend environment.
 
 ## Note
 
-This library was first developed when Cognito was still relatively new and complex to use from the backend. The situation improved greatly though, and it is probably better to use standard AWS SDKs now. If you are looking for something simple, you can use this. If you want to use the full power of Amazon Cognito, you should probably use the official AWS SDKs.
+This library was first developed when Cognito was still relatively new and complex to use from the backend. The situation improved greatly though, and it is probably better to use standard AWS SDKs now.
+
+However, if you are looking for something simple, you can use this. If you want to use the full power of Amazon Cognito, you should probably use the official AWS SDK.
 
 ## Usage
 
@@ -25,8 +26,6 @@ let CognitoUserPoolWrapper = require('cognito-user-pool')(poolData);
 ```
 
 ## Methods
-
-Actual data to pass to the function depends on your user pool settings.
 
 ### Signup
 
@@ -86,7 +85,7 @@ Login an existing and confirmed user:
 CognitoUserPoolWrapper.login(params, callback)
 ```
 
-Note that username can be any alias field as defined in user pool settings.
+Note that `username` can be any alias field as defined in user pool settings.
 
 ```
 params: {
@@ -94,8 +93,7 @@ params: {
   "password": "string"
 }
 ```
-This function returns either authentication tokens (more on that later)
-or a custom challenge for continuing the authentication process.
+This function returns either authentication tokens (more on that later) or a custom challenge for continuing the authentication process.
  
 In that case, you get:
 ```
@@ -106,10 +104,9 @@ In that case, you get:
 ```
 
 With `nextStep` being either `MFA_AUTH` or `NEW_PASSWORD_REQUIRED`.  
-`MFA_AUTH` means a SMS was sent to their cell phone with a code to add to the `loginMfa` method,
-while `NEW_PASSWORD_REQUIRED` means they need to reset their password in the next step with `loginNewPasswordRequired`.
+`MFA_AUTH` means a SMS was sent to their cell phone with a code to add to the `loginMfa` method, while `NEW_PASSWORD_REQUIRED` means they need to reset their password in the next step with `loginNewPasswordRequired`.
 
-If authentication was successful, you retrieve instead 3 auth tokens and the associated expiration dates:
+If authentication was successful, here is what you get:
 
 ```
 {
@@ -157,9 +154,9 @@ params: {
 }
 ```
 
-### Logout
+### Logout globally
 
-This method invalidates all issued tokens.
+This method invalidates all issued tokens, and the user will be logged out everywhere. For a simple local logout, you should use a local invalidation of user tokens (clear cookies, etc.).
 
 ```
 CognitoUserPoolWrapper.logout(params, callback)
@@ -175,7 +172,7 @@ params: {
 
 ### Refresh Session
 
-Generate new refreshToken, idToken and accessToken with a new expiry date.
+Generate new `refreshToken`, `idToken` and `accessToken` with a new expiry date.
 
 ```
 CognitoUserPoolWrapper.refreshSession(params, callback)
@@ -250,7 +247,7 @@ params: {
 
 ### Edit profile
 
-Use this endpoint to edit all user attributes except phone (see below).
+Use this endpoint to edit all user attributes except `phone_number` (see below).
 
 ```
 CognitoUserPoolWrapper.profileEdit(params, callback)
@@ -312,8 +309,7 @@ params: {
 ### Forgot password
 
 Start a forgot password flow.  
-Cognito will send a `passwordResetCode` to one of the user's confirmed contact methods (email or SMS)
-to be used in the `passwordReset` method below.
+Cognito will send a `passwordResetCode` to one of the user's confirmed contact methods (email or SMS) to be used in the `passwordReset` method below.
 
 ```
 CognitoUserPoolWrapper.passwordForgot(params, callback)
