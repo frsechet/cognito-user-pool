@@ -22,7 +22,7 @@ function loginNewPasswordRequired(poolData, body, cb) {
   // update cognitoUser Session with the Session of the NEW_PASSWORD_REQUIRED request
   cognitoUser.Session = loginSession;
 
-  cognitoUser.completeNewPasswordChallenge(newPassword, {}, {
+  cognitoUser.completeNewPasswordChallenge(newPassword, body.attributes, {
     onSuccess(result) {
       const data = {
         refreshToken: result.getRefreshToken().getToken(),
