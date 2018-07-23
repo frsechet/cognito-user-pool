@@ -1,7 +1,8 @@
 module.exports = {
   extends: "airbnb-base",
-  parser: "babel-eslint",
-  parserOptions: { "ecmaVersion": 7 },
+  parserOptions: { 
+    "ecmaVersion": 2017,
+  },
   rules: {
     "object-curly-newline": 0,
     "consistent-return": 0,
@@ -21,11 +22,5 @@ module.exports = {
     "brace-style": ["error", "stroustrup", { "allowSingleLine": true }],
     "indent": ["error", 2, { "SwitchCase": 1 }],
     "linebreak-style": ["error", "unix"],
-  },
-  globals: {
-    "controllers": true,
-    "validators": true,
-    "services": true,
-    "rootpath": true,
   },
 };
