@@ -22,7 +22,7 @@ const poolData = {
   ClientId: USER_POOL_CLIENT_ID, // generated in the AWS console
   Paranoia: PARANOIA_LEVEL // an integer between 1 - 10
 };
-let CognitoUserPoolWrapper = require('cognito-user-pool')(poolData);
+const CognitoUserPoolWrapper = require('cognito-user-pool')(poolData);
 ```
 
 ## Methods
@@ -110,8 +110,7 @@ If authentication was successful, here is what you get:
 
 ```
 {
-  "idToken": "string",
-  "accessToken": "string",
+  "refreshToken": "string",
   "accessToken": "string",
   "accessTokenExpiresAt": integer,
   "idToken": "string",
