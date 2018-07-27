@@ -1,7 +1,6 @@
 const CognitoItentityMethods = require('./methods');
 
 class CognitoIdentityWrapper {
-
   constructor(poolData) {
     this.poolData = poolData || null;
     return this;
@@ -59,6 +58,10 @@ class CognitoIdentityWrapper {
     return CognitoItentityMethods.profileEditPhoneNumber(this.poolData, body, cb);
   }
 
+  profileAttributeConfirm(body, cb) {
+    return CognitoItentityMethods.profileAttributeConfirm(this.poolData, body, cb);
+  }
+
   setMfa(body, cb) {
     return CognitoItentityMethods.setMfa(this.poolData, body, cb);
   }
@@ -70,7 +73,6 @@ class CognitoIdentityWrapper {
   refreshSession(body, cb) {
     return CognitoItentityMethods.refreshSession(this.poolData, body, cb);
   }
-
 }
 
 module.exports = function Wrapper(poolData) {

@@ -9,6 +9,7 @@ const passwordReset = require('./passwordReset.js');
 const profile = require('./profile.js');
 const profileEdit = require('./profileEdit.js');
 const profileEditPhoneNumber = require('./profileEditPhoneNumber.js');
+const profileAttributeConfirm = require('./profileAttributeConfirm.js');
 const refreshSession = require('./refreshSession.js');
 const setMfa = require('./setMfa.js');
 const signup = require('./signup.js');
@@ -27,9 +28,10 @@ module.exports = {
   profile,
   profileEdit,
   profileEditPhoneNumber,
+  profileAttributeConfirm,
   refreshSession,
   setMfa,
   signup,
   signupConfirm,
-  signupResend,
+  signupResend
 };
