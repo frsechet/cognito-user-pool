@@ -268,6 +268,24 @@ params: {
 }
 ```
 
+### Confirm/Verify profile attribute change
+
+Some attributes (such as `email`) need code verification after they have been updated by the user.  Use this endpoint to verify that attribute.
+
+```
+CognitoUserPoolWrapper.profileAttributeConfirm(params, callback)
+```
+
+```
+params: {
+  "username": "string",
+  "idToken": "string",
+  "accessToken": "string",
+  "attribute": "string",
+  "confirmationCode": "string"
+}
+```
+
 ### Edit phone number
 
 Use this endpoint to change the user's phone number.
