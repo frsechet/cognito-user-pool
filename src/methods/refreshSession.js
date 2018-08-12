@@ -22,7 +22,7 @@ async function refreshSession(poolData, body, cb) {
   const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
 
   cognitoUser.refreshSession(refreshToken, (err, res) => {
-    if (err) cb(err);
+    if (err) return cb(err);
 
     const data = {
       refreshToken: res.getRefreshToken().getToken(),
